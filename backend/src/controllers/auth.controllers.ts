@@ -78,16 +78,17 @@ export async function signup(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-     const result = loginSchema.safeParse(req.body)
-     
-     if(!result.success){
-          res.status(411).json({
+    const result = loginSchema.safeParse(req.body)
+    console.log(JSON.stringify(result));
+
+    if (!result.success) {
+        res.status(411).json({
             message: "Error in inputs"
         })
         return
-     }     
-     
-     const { username, password } = result.data;
+    }
+
+    const { username, password } = result.data;
 
     if (!username || !password) {
         res.status(411).json({
@@ -119,8 +120,7 @@ export async function login(req: Request, res: Response) {
             id: existingUser._id
         }, process.env.JWT_SECRET!)
 
-        res.status(200).json({
-            token,
+        res.cookie('token', token, { httpOnly: true }).status(200).json({
             message: "Login Succesfull"
         })
 

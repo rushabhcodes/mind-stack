@@ -6,10 +6,12 @@ const app = express();
 import authRoute from "./routes/auth.routes"
 import userRoute from "./routes/user.routes"
 import initDb from "./db/db";
+import cors from "cors"
 const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ credentials: true }))
 
 app.use("/api/v1/auth", authRoute)
 

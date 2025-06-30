@@ -9,8 +9,7 @@ interface JwtPayload {
 export default function auth(req: Request, res: Response, next: NextFunction) {
 
     const token = req.cookies.token;
-
-
+    console.log("rutoken: " + token)
     if (!token) {
         res.status(401).json({
             message: 'Not logged in'
@@ -20,7 +19,7 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
-        req.body.userId = decodedToken.id
+        req.userId = decodedToken.id
 
         next();
 

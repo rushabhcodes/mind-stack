@@ -6,7 +6,7 @@ import { TwitterIcon } from "../../icons/Twitter";
 interface CardProps {
   title: string;
   link: string;
-  type: "twitter" | "youtube";
+  type?: "twitter" | "youtube";
 }
 
 export const CardComponent = (props: CardProps) => {

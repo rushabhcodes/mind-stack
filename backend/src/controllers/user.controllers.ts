@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import contentModel from "../models/content";
-import z, { boolean } from "zod"
+import z from "zod"
 import linkModel from "../models/link";
 import { random } from "../utils/utils";
 
@@ -8,21 +8,15 @@ import { random } from "../utils/utils";
 const createContentSchema = z.object({
     title: z.string().min(3).max(50),
     link: z.string().url().max(100),
-    userId: z.string()
 })
 
-const getContentSchema = z.object({
-    userId: z.string()
-})
 
 const deleteContentSchema = z.object({
     contentId: z.string(),
-    userId: z.string()
 })
 
 const createShareLinkSchema = z.object({
     share: z.boolean(),
-    userId: z.string()
 })
 
 const getsharedLinkSchema = z.object({
@@ -44,15 +38,20 @@ export async function createContent(req: Request, res: Response) {
         return
     }
 
-    const { title, link, userId } = result.data;
+    const { title, link } = result.data;
 
 
     try {
-        await contentModel.create({
+        const data = await contentModel.create({
             title,
             link,
             tags: [],
-            userId,
+            userId: req.userId,
+        })
+
+        res.status(200).json({
+            result: data,
+            message: "Added Successfully"
         })
 
 
@@ -66,17 +65,7 @@ export async function createContent(req: Request, res: Response) {
 
 export async function getContent(req: Request, res: Response) {
 
-    const result = getContentSchema.safeParse(req.body)
-
-    if (!result.success) {
-        res.status(411).json({
-            message: "Error in inputs",
-            result
-        })
-        return
-    }
-
-    const userId = result.data.userId;
+    const userId = req.userId;
 
     try {
         const content = await contentModel.find({
@@ -110,12 +99,12 @@ export async function deleteContent(req: Request, res: Response) {
         return
     }
 
-    const { contentId, userId } = result.data;
+    const { contentId } = result.data;
     try {
 
         const deletedContent = await contentModel.deleteOne({
             _id: contentId,
-            userId
+            userId: req.userId
         })
 
         res.status(200).json({
@@ -145,13 +134,13 @@ export async function createShareLink(req: Request, res: Response) {
         return
     }
 
-    const { userId, share } = result.data;
+    const { share } = result.data;
 
     try {
         const hash = random(10)
         if (share) {
             const existingLink = await linkModel.findOne({
-                userId
+                userId: req.userId
             })
 
             if (existingLink) {
@@ -162,7 +151,7 @@ export async function createShareLink(req: Request, res: Response) {
             }
 
             await linkModel.create({
-                userId,
+                userId: req.userId,
                 hash
 
             })
@@ -176,7 +165,7 @@ export async function createShareLink(req: Request, res: Response) {
 
         else {
             await linkModel.deleteOne({
-                userId
+                userId: req.userId
             });
             res.json({
                 message: "Removed sharable link"
