@@ -1,6 +1,5 @@
 import { ShareIcon } from "../../icons/ShareIcon";
 import { TrashIcon } from "../../icons/TrashIcon";
-import { ProjectIcon } from "../../icons/ProjectIcon";
 import { YoutubeIcon } from "../../icons/Youtube";
 import { TwitterIcon } from "../../icons/Twitter";
 
@@ -10,19 +9,21 @@ interface CardProps {
   type: "twitter" | "youtube";
 }
 
-export const Card = (props: CardProps) => {
+export const CardComponent = (props: CardProps) => {
   return (
-    <div className="m-4 p-6 rounded-2xl shadow-md border border-slate-100 max-w-96">
+    <div className="m-4 p-6 rounded-2xl shadow-2xl border bg-white border-slate-100 font-serif text-bold max-w-96">
       <div className="flex justify-between pb-4">
-        <div className="flex">
-          <ProjectIcon size="md" />
+        <div className="flex gap-2">
+          <div className="text-black-500">
+            {props.type == "twitter" && <TwitterIcon size="md" />}</div>
+            <div className ="text-red-500">
+            {props.type == "youtube" && <YoutubeIcon size="md" />}
+          </div>
           <div>{props.title}</div>
         </div>
-        <div className="flex text-gray-500">
+        <div className="flex gap-2 text-black-500">
           <ShareIcon size="md" />
           <TrashIcon size="md" />
-          <YoutubeIcon size="md" />
-          <TwitterIcon size="md" />
         </div>
       </div>
       <div>
@@ -39,7 +40,11 @@ export const Card = (props: CardProps) => {
           ></iframe>
         )}
         {props.type == "twitter" && (
-          <><blockquote className="twitter-tweet"><a href="https://twitter.com/rushabhstwt/status/1698522302890057737"></a></blockquote></>
+          <>
+            <blockquote className="twitter-tweet">
+              <a href="https://twitter.com/rushabhstwt/status/1698522302890057737"></a>
+            </blockquote>
+          </>
         )}
       </div>
     </div>
