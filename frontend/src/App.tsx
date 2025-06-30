@@ -1,3 +1,4 @@
+import LandingPage from "./pages";
 import Dashboard from "./pages/dashboard";
 import { SignIn } from "./pages/signin";
 import { SignUp } from "./pages/signup";
@@ -11,6 +12,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<LandingPage />} />
+        
       </Routes>
     </BrowserRouter>
   );
