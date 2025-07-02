@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LogIn, ArrowRight } from 'lucide-react';
 
-// Animation helper
+
 const fadeInSlide = (active: boolean) => ({
   opacity: active ? 1 : 0,
   transform: active ? 'scale(1) translateY(0)' : 'scale(0.98) translateY(40px)',
@@ -40,7 +40,7 @@ function LandingPage() {
   const [featureIndex, setFeatureIndex] = useState(0);
 
   const slides = [
-    // Hero Slide
+    
     <div
       key="hero"
       style={{
@@ -59,7 +59,7 @@ function LandingPage() {
         ...fadeInSlide(slide === 0)
       }}
     >
-      {/* Only small animated objects and grid lines */}
+      
       <div
         style={{
           position: 'absolute',
@@ -69,7 +69,7 @@ function LandingPage() {
           pointerEvents: 'none'
         }}
       >
-        {/* Subtle grid lines */}
+      
         <svg width="100%" height="100%" style={{ position: 'absolute', left: 0, top: 0, opacity: 0.08 }}>
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -78,7 +78,7 @@ function LandingPage() {
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
-        {/* Small animated objects */}
+      
         <div
           style={{
             position: 'absolute',
