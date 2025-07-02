@@ -7,6 +7,8 @@ import { LinkedInIcon } from "../../components/ui/linkdINIcon";
 import React from "react";
 
 export const Sidebar = () => {
+
+  
   return (
     <aside className="h-screen bg-white shadow-xl w-72 fixed left-0 top-0 flex flex-col border-r border-blue-100 z-30">
       {/* Logo/Brand - styled like landing page */}

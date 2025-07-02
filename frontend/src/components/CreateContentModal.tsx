@@ -69,7 +69,7 @@ export default function CreateContentModal({
 
               <Button
                 type="submit"
-                className="w-full  text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
+                className="w-full  text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105  "
                 size="lg"
               >
                 Add Item
