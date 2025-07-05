@@ -38,6 +38,7 @@ function LandingPage() {
       
       if (delta > 0) {
         // Scrolling down - next slide
+        e.preventDefault(); // Prevent default scrolling behavior
         setSlide((prevSlide) => {
           const newSlide = Math.min(totalSlides - 1, prevSlide + 1);
           if (newSlide !== prevSlide) {
@@ -50,6 +51,7 @@ function LandingPage() {
         });
       } else {
         // Scrolling up - previous slide
+        e.preventDefault(); // Prevent default scrolling behavior
         setSlide((prevSlide) => {
           const newSlide = Math.max(0, prevSlide - 1);
           if (newSlide !== prevSlide) {

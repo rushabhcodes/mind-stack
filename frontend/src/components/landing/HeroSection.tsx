@@ -51,22 +51,22 @@ export default function HeroSection({ isActive }: HeroSectionProps) {
       </div>
 
       <div className="relative z-10">
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-8 text-slate-800 tracking-tight leading-none">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 text-slate-800 tracking-tight leading-tight">
           Save, Organize &<br />
           <span className="bg-gradient-to-r from-indigo-500 to-sky-400 bg-clip-text text-transparent">
             Remember Everything
           </span>
         </h1>
-        <p className="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-normal">
+        <p className="text-base md:text-lg text-slate-500 max-w-xl mx-auto mb-8 leading-relaxed font-normal">
           The most elegant way to save links, videos, tweets, and notes.
           <br />
           Your digital brain—always organized, always accessible.
         </p>
         <button
-          className="bg-gradient-to-r from-indigo-500 to-sky-400 text-white px-9 py-3.5 rounded-xl text-lg font-bold border-0 shadow-[0_6px_24px_rgba(99,102,241,0.18)] cursor-pointer inline-flex items-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_36px_rgba(99,102,241,0.22)]"
+          className="bg-gradient-to-r from-indigo-500 to-sky-400 text-white px-7 py-2.5 rounded-lg text-base font-bold border-0 shadow-[0_4px_16px_rgba(99,102,241,0.15)] cursor-pointer inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_24px_rgba(99,102,241,0.18)]"
           onClick={() => navigate("/signin")}
         >
-          Let's Start <ArrowRight size={22} />
+          Let's Start <ArrowRight size={20} />
         </button>
       </div>
     </div>
