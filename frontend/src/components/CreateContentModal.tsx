@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CrossIcon } from "../icons/CrossIcon";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import axios from "axios";
@@ -64,7 +64,7 @@ export default function CreateContentModal({
             onClick={handleClose}
             className="cursor-pointer flex justify-end pb-2"
           >
-            <CrossIcon size="md" />
+            <Cross2Icon className="w-6 h-6" />
           </div>
           <div className="flex flex-col gap-2">
             {error && (

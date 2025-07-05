@@ -1,5 +1,4 @@
-import { PlusIcon } from "../icons/PlusIcon";
-import { ShareIcon } from "../icons/ShareIcon";
+import { PlusIcon, Share2Icon } from "@radix-ui/react-icons";
 import { Sidebar } from "../components/ui/Sidebar";
 import CreateContentModal from "../components/CreateContentModal";
 import { useState } from "react";
@@ -21,7 +20,7 @@ function Dashboard() {
       <div className="ml-72 bg-sky-50 min-h-screen p-6">
         <div className="flex justify-end gap-3 mb-6">
           <Button variant="outline">
-            <ShareIcon size="md" />
+            <Share2Icon className="w-6 h-6" />
             Share
           </Button>
           <Button
@@ -51,7 +50,7 @@ function Dashboard() {
             }}
             onClick={() => setOpen(true)}
           >
-            <PlusIcon size="md" />
+            <PlusIcon className="w-6 h-6" />
             Add Content
           </Button>
         </div>

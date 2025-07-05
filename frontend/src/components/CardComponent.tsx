@@ -1,7 +1,6 @@
 import { getTypeIcon } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { TrashIcon } from "@/icons/TrashIcon";
-import { ShareIcon } from "@/icons/ShareIcon";
+import { Trash2, Share } from "lucide-react";
 import { useState } from "react";
 
 export const CardComponent = ({
@@ -224,7 +223,7 @@ export const CardComponent = ({
               onClick={handleShareClick}
               title="Share link"
             >
-              <ShareIcon size="sm" />
+              <Share className="w-4 h-4" />
             </button>
             {showDeleteConfirm ? (
               <div className="flex items-center gap-1">
@@ -250,7 +249,7 @@ export const CardComponent = ({
                 onClick={() => setShowDeleteConfirm(true)}
                 title="Delete"
               >
-                <TrashIcon size="sm" />
+                <Trash2 className="w-4 h-4" />
               </button>
             )}
           </div>

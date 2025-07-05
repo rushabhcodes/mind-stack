@@ -1,7 +1,5 @@
-import { TwitterIcon } from "../../components/ui/twittericon"
-import { YoutubeIcon } from "../../icons/Youtube";
-import { InstagramIcon } from "./InstagramIcon";
-import { LinkedInIcon } from "../../components/ui/linkdINIcon";
+import { TwitterLogoIcon, InstagramLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
+import { VideoIcon } from "@radix-ui/react-icons";
 import axios from "../../lib/axios";
 import { useNavigate } from "react-router-dom";
 
@@ -54,7 +52,7 @@ export const Sidebar = () => {
               onMouseEnter={e => (e.currentTarget.style.color = "#000000")}
               onMouseLeave={e => (e.currentTarget.style.color = "#000000")}
             >
-              <TwitterIcon size={24} />
+              <TwitterLogoIcon className="w-6 h-6" />
               <span>Twitter</span>
             </a>
           </li>
@@ -68,7 +66,7 @@ export const Sidebar = () => {
               onMouseEnter={e => (e.currentTarget.style.color = "#b80000")}
               onMouseLeave={e => (e.currentTarget.style.color = "#FF0000")}
             >
-              <YoutubeIcon size="md" />
+              <VideoIcon className="w-6 h-6" />
               <span>Youtube</span>
             </a>
           </li>
@@ -82,7 +80,7 @@ export const Sidebar = () => {
               onMouseEnter={e => (e.currentTarget.style.color = "#C13584")}
               onMouseLeave={e => (e.currentTarget.style.color = "#E1306C")}
             >
-              <InstagramIcon size={24} />
+              <InstagramLogoIcon className="w-6 h-6" />
               <span>Instagram</span>
             </a>
           </li>
@@ -96,7 +94,7 @@ export const Sidebar = () => {
               onMouseEnter={e => (e.currentTarget.style.color = "#005983")}
               onMouseLeave={e => (e.currentTarget.style.color = "#0077B5")}
             >
-              <LinkedInIcon size={24} />
+              <LinkedInLogoIcon className="w-6 h-6" />
               <span>LinkedIn</span>
             </a>
           </li>
