@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { LogIn, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const fadeInSlide = (active: boolean) => ({
   opacity: active ? 1 : 0,
@@ -45,6 +46,7 @@ function LandingPage() {
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollTimeRef = useRef(0);
+  const navigate = useNavigate();
 
   // Handle scroll events for slide navigation
   useEffect(() => {
@@ -328,6 +330,7 @@ function LandingPage() {
             (e.currentTarget as HTMLButtonElement).style.boxShadow =
               "0 6px 24px rgba(99,102,241,0.18)";
           }}
+           onClick={() => navigate("/signin")}
         >
           Let's Start <ArrowRight size={22} />
         </button>
@@ -998,6 +1001,7 @@ function LandingPage() {
               alignItems: "center",
               gap: "8px",
             }}
+            onClick={() => navigate("/signin")}
           >
             <LogIn size={18} />
             Sign In
