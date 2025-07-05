@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import axios from "../lib/axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 export const SignIn = () => {
   const [username, setUsername] = useState("");
@@ -48,14 +49,13 @@ export const SignIn = () => {
       });
 
       if (res.status === 200) {
+        toast.success("Login successful! Welcome back.");
         navigate(from, { replace: true });
       }
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Login failed. Please try again.");
-      }
+      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

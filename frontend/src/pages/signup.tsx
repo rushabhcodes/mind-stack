@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import axios from "../lib/axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,9 @@ export const SignUp = () => {
 
     // Validate passwords match
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      const errorMessage = "Passwords do not match";
+      toast.error(errorMessage);
+      setError(errorMessage);
       setIsLoading(false);
       return;
     }
@@ -55,17 +58,17 @@ export const SignUp = () => {
       });
 
       if (res.status === 200 || res.status === 201) {
-        setSuccess("Account created successfully! Redirecting to sign in...");
+        const successMessage = "Account created successfully! Redirecting to sign in...";
+        toast.success(successMessage);
+        setSuccess(successMessage);
         setTimeout(() => {
           navigate("/signin");
         }, 2000);
       }
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Registration failed. Please try again.");
-      }
+      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

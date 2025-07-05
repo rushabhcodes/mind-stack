@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface FeedbackFormProps {
   isActive: boolean;
@@ -16,7 +17,7 @@ export default function FeedbackForm({ isActive }: FeedbackFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Thank you for your feedback!");
+    toast.success("Thank you for your feedback! We appreciate your input.");
     setName("");
     setFeedback("");
   };

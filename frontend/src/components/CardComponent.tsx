@@ -2,6 +2,7 @@ import { getTypeIcon } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Trash2, Share } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const CardComponent = ({
   title,
@@ -91,14 +92,17 @@ export const CardComponent = ({
     if (lowerType.includes("linkedin") || lowerLink.includes("linkedin.com")) {
       let contentType = "LinkedIn Content";
       let icon = "💼";
-      
+
       if (lowerLink.includes("/in/")) {
         contentType = "LinkedIn Profile";
         icon = "👤";
       } else if (lowerLink.includes("/company/")) {
         contentType = "LinkedIn Company";
         icon = "🏢";
-      } else if (lowerLink.includes("/posts/") || lowerLink.includes("/feed/update/")) {
+      } else if (
+        lowerLink.includes("/posts/") ||
+        lowerLink.includes("/feed/update/")
+      ) {
         contentType = "LinkedIn Post";
         icon = "📝";
       }
@@ -123,7 +127,10 @@ export const CardComponent = ({
     }
 
     // Instagram special preview
-    if (lowerType.includes("instagram") || lowerLink.includes("instagram.com")) {
+    if (
+      lowerType.includes("instagram") ||
+      lowerLink.includes("instagram.com")
+    ) {
       return (
         <div className="w-full flex-1 min-h-[120px] bg-gradient-to-br from-pink-50 to-purple-100 border-2 border-pink-200 rounded-md flex flex-col items-center justify-center text-pink-700 p-4">
           <div className="text-3xl mb-2">📸</div>
@@ -184,12 +191,14 @@ export const CardComponent = ({
 
   const handleDelete = async () => {
     if (!onDelete || !id) return;
-    
+
     setIsDeleting(true);
     try {
       await onDelete(id);
+      toast.success("Content deleted successfully!");
     } catch (error) {
       console.error("Error deleting content:", error);
+      toast.error("Failed to delete content. Please try again.");
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
@@ -199,13 +208,12 @@ export const CardComponent = ({
   const handleShareClick = async () => {
     try {
       await navigator.clipboard.writeText(link);
-      // You could add a toast notification here
+      toast.success("Link copied to clipboard!");
     } catch (error) {
       console.error("Failed to copy link:", error);
+      toast.error("Failed to copy link. Please try again.");
     }
   };
-
-  
 
   return (
     <Card className="h-full flex flex-col">
@@ -274,26 +282,28 @@ export const CardComponent = ({
         {description && (
           <div className="mt-3 p-3 bg-gray-50 rounded-md border">
             <div className="text-sm text-gray-700 leading-relaxed">
-              {description.split('\n').map((line, index) => (
-                <p key={index} className={index > 0 ? 'mt-2' : ''}>
-                  {line.split(/(\*\*.*?\*\*|\*.*?\*)/).map((part, partIndex) => {
-                    if (part.startsWith('**') && part.endsWith('**')) {
-                      // Bold text
-                      return (
-                        <strong key={partIndex} className="font-semibold">
-                          {part.slice(2, -2)}
-                        </strong>
-                      );
-                    } else if (part.startsWith('*') && part.endsWith('*')) {
-                      // Italic text
-                      return (
-                        <em key={partIndex} className="italic">
-                          {part.slice(1, -1)}
-                        </em>
-                      );
-                    }
-                    return part;
-                  })}
+              {description.split("\n").map((line, index) => (
+                <p key={index} className={index > 0 ? "mt-2" : ""}>
+                  {line
+                    .split(/(\*\*.*?\*\*|\*.*?\*)/)
+                    .map((part, partIndex) => {
+                      if (part.startsWith("**") && part.endsWith("**")) {
+                        // Bold text
+                        return (
+                          <strong key={partIndex} className="font-semibold">
+                            {part.slice(2, -2)}
+                          </strong>
+                        );
+                      } else if (part.startsWith("*") && part.endsWith("*")) {
+                        // Italic text
+                        return (
+                          <em key={partIndex} className="italic">
+                            {part.slice(1, -1)}
+                          </em>
+                        );
+                      }
+                      return part;
+                    })}
                 </p>
               ))}
             </div>
@@ -310,7 +320,9 @@ export const CardComponent = ({
           </a>
         </div>
       </CardContent>
-      <CardFooter className="flex-shrink-0 text-sm text-gray-500">{type}</CardFooter>
+      <CardFooter className="flex-shrink-0 text-sm text-gray-500">
+        {type}
+      </CardFooter>
     </Card>
   );
 };

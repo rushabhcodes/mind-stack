@@ -1,6 +1,7 @@
 import { extractDomain } from "@/lib/utils";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ContentItem {
   _id: string;
@@ -21,9 +22,10 @@ export function useContent() {
         type: extractDomain(item.link),
       }));
       setContent(contentWithType);
-      console.log(content)
+      console.log(content);
     } catch (error) {
       console.error("Error fetching content:", error);
+      toast.error("Failed to load content. Please refresh the page.");
     }
   };
 
@@ -31,7 +33,7 @@ export function useContent() {
     try {
       await axios.delete(`api/v1/user/content/${id}`);
       // Remove the deleted item from local state
-      setContent(prev => prev.filter(item => item._id !== id));
+      setContent((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
       console.error("Error deleting content:", error);
       throw error; // Re-throw so the component can handle it

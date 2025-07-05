@@ -12,6 +12,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import axios from "../lib/axios";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
@@ -30,23 +31,25 @@ export default function Dashboard() {
       if (response.data?.message) {
         // Extract the share path from response (e.g., "/share/abc123")
         const sharePath = response.data.message;
+        console.log(sharePath)
         const fullShareUrl = `${window.location.origin}${sharePath}`;
         const shareText = `Check out my MindStack collection! I've organized ${content.length} items in my knowledge hub.`;
 
         try {
           // Check if Web Share API is available (mobile devices)
           if (navigator.share) {
-            await navigator.share({
+            await navigator.share({ 
               title: "My MindStack Collection",
               text: shareText,
               url: fullShareUrl,
             });
+            toast.success("Content shared successfully!");
           } else {
             // Fallback to clipboard copy
             await navigator.clipboard.writeText(
               `${shareText}\n\n${fullShareUrl}`
             );
-            alert("Share link copied to clipboard!");
+            toast.success("Share link copied to clipboard!");
           }
         } catch (shareError) {
           console.error("Error sharing:", shareError);
@@ -54,18 +57,18 @@ export default function Dashboard() {
           // Final fallback - copy just the URL
           try {
             await navigator.clipboard.writeText(fullShareUrl);
-            alert("Share link copied to clipboard!");
+            toast.success("Share link copied to clipboard!");
           } catch (clipboardError) {
             console.error("Clipboard access failed:", clipboardError);
-            alert(
-              `Share link: ${fullShareUrl}\n\nPlease copy this link manually.`
+            toast.error(
+              "Failed to copy link. Please copy manually: " + fullShareUrl
             );
           }
         }
       }
     } catch (error) {
       console.error("Error creating share link:", error);
-      alert("Failed to create share link. Please try again.");
+      toast.error("Failed to create share link. Please try again.");
     } finally {
       setIsSharing(false);
     }

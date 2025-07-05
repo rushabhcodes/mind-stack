@@ -149,7 +149,7 @@ export async function createShareLink(req: Request, res: Response) {
 
             if (existingLink) {
                 res.json({
-                    message: "/share" + existingLink.hash
+                    message: "/share/" + existingLink.hash
                 })
                 return
             }
@@ -160,7 +160,7 @@ export async function createShareLink(req: Request, res: Response) {
 
             })
             res.json({
-                message: "/share" + hash
+                message: "/share/" + hash
             })
             return
 
@@ -184,9 +184,6 @@ export async function createShareLink(req: Request, res: Response) {
         })
     }
 }
-
-
-
 
 export async function getSharedContent(req: Request, res: Response) {
     const result = getSharedContentSchema.safeParse(req.params);

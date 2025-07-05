@@ -3,6 +3,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import axios from "axios";
+import { toast } from "sonner";
 export default function CreateContentModal({
   open,
   onClose,
@@ -22,13 +23,17 @@ export default function CreateContentModal({
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+
     try {
       await axios.post(`api/v1/user/content`, { title, link, description });
       // Reset form
       setTitle("");
       setLink("");
       setDescription("");
+
+      // Show success toast
+      toast.success("Content added successfully!");
+
       // Refresh content list if callback provided
       if (onContentAdded) {
         onContentAdded();
@@ -37,7 +42,11 @@ export default function CreateContentModal({
       onClose();
     } catch (error: any) {
       console.error("Error creating content:", error);
-      setError(error.response?.data?.message || "Failed to add content. Please try again.");
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to add content. Please try again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -54,8 +63,8 @@ export default function CreateContentModal({
 
   return open ? (
     <>
-      <div 
-        className="fixed w-screen h-screen opacity-60 z-50 bg-slate-900 cursor-pointer" 
+      <div
+        className="fixed w-screen h-screen opacity-60 z-50 bg-slate-900 cursor-pointer"
         onClick={handleClose}
       ></div>
       <div className="fixed z-70 flex justify-center items-center bg-transparent w-screen h-screen">
@@ -127,7 +136,8 @@ export default function CreateContentModal({
                     rows={4}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    You can use **bold**, *italic*, and other markdown formatting
+                    You can use **bold**, *italic*, and other markdown
+                    formatting
                   </p>
                 </div>
               </div>
