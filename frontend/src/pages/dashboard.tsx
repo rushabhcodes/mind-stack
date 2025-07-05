@@ -11,11 +11,66 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import axios from "../lib/axios";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const { content, deleteContent, refreshContent } = useContent();
-  
+
+  const handleShare = async () => {
+    setIsSharing(true);
+
+    try {
+      // Create a shareable link via backend API
+      const response = await axios.post("/api/v1/user/brain/share", {
+        share: true,
+      });
+
+      if (response.data?.message) {
+        // Extract the share path from response (e.g., "/share/abc123")
+        const sharePath = response.data.message;
+        const fullShareUrl = `${window.location.origin}${sharePath}`;
+        const shareText = `Check out my MindStack collection! I've organized ${content.length} items in my knowledge hub.`;
+
+        try {
+          // Check if Web Share API is available (mobile devices)
+          if (navigator.share) {
+            await navigator.share({
+              title: "My MindStack Collection",
+              text: shareText,
+              url: fullShareUrl,
+            });
+          } else {
+            // Fallback to clipboard copy
+            await navigator.clipboard.writeText(
+              `${shareText}\n\n${fullShareUrl}`
+            );
+            alert("Share link copied to clipboard!");
+          }
+        } catch (shareError) {
+          console.error("Error sharing:", shareError);
+
+          // Final fallback - copy just the URL
+          try {
+            await navigator.clipboard.writeText(fullShareUrl);
+            alert("Share link copied to clipboard!");
+          } catch (clipboardError) {
+            console.error("Clipboard access failed:", clipboardError);
+            alert(
+              `Share link: ${fullShareUrl}\n\nPlease copy this link manually.`
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error creating share link:", error);
+      alert("Failed to create share link. Please try again.");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return (
     <SidebarProvider>
       <CreateContentModal
@@ -28,17 +83,18 @@ export default function Dashboard() {
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 h-4"
-            />
+            <Separator orientation="vertical" className="mr-2 h-4" />
             <h1 className="text-lg font-semibold">Dashboard</h1>
           </div>
-          
+
           <div className="flex items-center gap-3">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={handleShare}
+              disabled={isSharing}
+            >
               <Share2 className="w-4 h-4 mr-2" />
-              Share
+              {isSharing ? "Creating Link..." : "Share"}
             </Button>
             <Button
               className="bg-gradient-to-r from-indigo-500 to-blue-400 hover:from-indigo-600 hover:to-blue-500 text-white font-bold"
@@ -49,7 +105,7 @@ export default function Dashboard() {
             </Button>
           </div>
         </header>
-        
+
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max">
             {content.map((data, index) => {

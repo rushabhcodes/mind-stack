@@ -45,77 +45,77 @@ const data = {
           title: "All Content",
           url: "/dashboard",
         },
-        {
-          title: "Recent",
-          url: "/recent",
-        },
-        {
-          title: "Favorites",
-          url: "/favorites",
-        },
+        // {
+        //   title: "Recent",
+        //   url: "/recent",
+        // },
+        // {
+        //   title: "Favorites",
+        //   url: "/favorites",
+        // },
       ],
     },
-    {
-      title: "Collections",
-      url: "#",
-      icon: Archive,
-      items: [
-        {
-          title: "Articles",
-          url: "#",
-        },
-        {
-          title: "Videos",
-          url: "#",
-        },
-        {
-          title: "Documents",
-          url: "#",
-        },
-        {
-          title: "Links",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Tags",
-      url: "#",
-      icon: Tag,
-      items: [
-        {
-          title: "Manage Tags",
-          url: "#",
-        },
-        {
-          title: "Popular Tags",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Profile",
-          url: "#",
-        },
-        {
-          title: "Preferences",
-          url: "#",
-        },
-        {
-          title: "Import/Export",
-          url: "#",
-        },
-        {
-          title: "Account",
-          url: "#",
-        },
-      ],
-    },
+    // {
+    //   title: "Collections",
+    //   url: "#",
+    //   icon: Archive,
+    //   items: [
+    //     {
+    //       title: "Articles",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Videos",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Documents",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Links",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Tags",
+    //   url: "#",
+    //   icon: Tag,
+    //   items: [
+    //     {
+    //       title: "Manage Tags",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Popular Tags",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: "Profile",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Preferences",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Import/Export",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Account",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
   ],
   navSecondary: [
     {
@@ -129,23 +129,23 @@ const data = {
       icon: Search,
     },
   ],
-  projects: [
-    {
-      name: "Work Resources",
-      url: "#",
-      icon: BookOpen,
-    },
-    {
-      name: "Learning",
-      url: "#",
-      icon: Brain,
-    },
-    {
-      name: "Personal",
-      url: "#",
-      icon: Star,
-    },
-  ],
+//   projects: [
+//     {
+//       name: "Work Resources",
+//       url: "#",
+//       icon: BookOpen,
+//     },
+//     {
+//       name: "Learning",
+//       url: "#",
+//       icon: Brain,
+//     },
+//     {
+//       name: "Personal",
+//       url: "#",
+//       icon: Star,
+//     },
+//   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -170,7 +170,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

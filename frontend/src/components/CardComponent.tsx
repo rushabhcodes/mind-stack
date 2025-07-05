@@ -225,32 +225,36 @@ export const CardComponent = ({
             >
               <Share className="w-4 h-4" />
             </button>
-            {showDeleteConfirm ? (
-              <div className="flex items-center gap-1">
-                <button
-                  className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  title="Confirm delete"
-                >
-                  {isDeleting ? "..." : "Yes"}
-                </button>
-                <button
-                  className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
-                  onClick={() => setShowDeleteConfirm(false)}
-                  title="Cancel delete"
-                >
-                  No
-                </button>
-              </div>
-            ) : (
-              <button
-                className="p-1 hover:bg-gray-100 rounded-md transition-colors text-red-500 hover:text-red-700"
-                onClick={() => setShowDeleteConfirm(true)}
-                title="Delete"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+            {onDelete && (
+              <>
+                {showDeleteConfirm ? (
+                  <div className="flex items-center gap-1">
+                    <button
+                      className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                      title="Confirm delete"
+                    >
+                      {isDeleting ? "..." : "Yes"}
+                    </button>
+                    <button
+                      className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                      onClick={() => setShowDeleteConfirm(false)}
+                      title="Cancel delete"
+                    >
+                      No
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="p-1 hover:bg-gray-100 rounded-md transition-colors text-red-500 hover:text-red-700"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    title="Delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>

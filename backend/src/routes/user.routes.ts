@@ -1,5 +1,5 @@
 import express from 'express';
-import { createContent, getContent, deleteContent, createShareLink, getsharedLink } from '../controllers/user.controllers';
+import { createContent, getContent, deleteContent, createShareLink, getSharedContent } from '../controllers/user.controllers';
 import auth from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -12,6 +12,6 @@ router.delete("/content/:contentId", auth, deleteContent);
 
 router.post("/brain/share",auth, createShareLink);
 
-router.get("/brain/:shareLink", getsharedLink);
+router.get("/brain/shared/:shareLink", getSharedContent);
 
 export default router 

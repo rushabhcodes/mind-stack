@@ -3,6 +3,7 @@ import contentModel from "../models/content";
 import z from "zod"
 import linkModel from "../models/link";
 import { random } from "../utils/utils";
+import userModel from "../models/user";
 
 
 const createContentSchema = z.object({
@@ -20,9 +21,11 @@ const createShareLinkSchema = z.object({
     share: z.boolean(),
 })
 
-const getsharedLinkSchema = z.object({
+const getSharedContentSchema = z.object({
     shareLink: z.string()
 })
+
+
 
 
 
@@ -183,9 +186,10 @@ export async function createShareLink(req: Request, res: Response) {
 }
 
 
-export async function getsharedLink(req: Request, res: Response) {
 
-    const result = getsharedLinkSchema.safeParse(req.params);
+
+export async function getSharedContent(req: Request, res: Response) {
+    const result = getSharedContentSchema.safeParse(req.params);
 
     if (!result.success) {
         res.status(411).json({
@@ -195,30 +199,39 @@ export async function getsharedLink(req: Request, res: Response) {
         return
     }
 
-    const hash = result.data.shareLink
-    console.log(hash);
-
+    const hash = result.data.shareLink;
 
     try {
-
-        const response = await linkModel.findOne({
+        // First, get the link data to find the user
+        const linkData = await linkModel.findOne({
             hash
-        }).populate("userId")
+        });
 
-        console.log(response)
+        if (!linkData) {
+            res.status(404).json({
+                message: "Share link not found"
+            });
+            return;
+        }
+
+        // Get the user's content
+        const content = await contentModel.find({
+            userId: linkData.userId
+        });
+
+        // Get user info (without sensitive data)
+        const user = await userModel.findById(linkData.userId).select('username email');
 
         res.status(200).json({
-            response,
-            message: "Fetched data"
-        })
-
-
+            content,
+            user,
+            message: "Shared content fetched successfully"
+        });
 
     } catch (error) {
         res.status(500).json({
             error,
             message: "Server Error"
-        })
+        });
     }
-
 }
