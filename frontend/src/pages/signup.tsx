@@ -1,41 +1,85 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import axios from "../lib/axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await axios.post(`api/v1/auth/signup`, { email, password, username });
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await axios.post(`/api/v1/auth/signup`, { 
+        email, 
+        password, 
+        username 
+      });
+
+      if (res.status === 200 || res.status === 201) {
+        setSuccess("Account created successfully! Redirecting to sign in...");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2000);
+      }
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Registration failed. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/20"></div>
-
-      <div className="relative w-full max-w-md">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Create Account
-            </h1>
-            <p className="text-blue-100">
-              Join MindStack to organize your thoughts
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Create Account</CardTitle>
+          <CardDescription>
+            Join MindStack to organize your thoughts
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="text-red-600 text-sm bg-red-50 p-3 rounded">
+                {error}
+              </div>
+            )}
+            
+            {success && (
+              <div className="text-green-600 text-sm bg-green-50 p-3 rounded">
+                {success}
+              </div>
+            )}
+            
             <div className="space-y-4">
               <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-blue-100 mb-2"
-                >
+                <label htmlFor="username" className="block text-sm font-medium mb-1">
                   Username
                 </label>
                 <Input
@@ -44,16 +88,12 @@ export const SignUp = () => {
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:border-blue-400 focus:ring-blue-400/50"
                   required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-blue-100 mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium mb-1">
                   Email
                 </label>
                 <Input
@@ -62,16 +102,12 @@ export const SignUp = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:border-blue-400 focus:ring-blue-400/50"
                   required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-blue-100 mb-2"
-                >
+                <label htmlFor="password" className="block text-sm font-medium mb-1">
                   Password
                 </label>
                 <Input
@@ -80,16 +116,12 @@ export const SignUp = () => {
                   placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:border-blue-400 focus:ring-blue-400/50"
                   required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-blue-100 mb-2"
-                >
+                <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
                   Confirm Password
                 </label>
                 <Input
@@ -98,7 +130,6 @@ export const SignUp = () => {
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:border-blue-400 focus:ring-blue-400/50"
                   required
                 />
               </div>
@@ -106,26 +137,23 @@ export const SignUp = () => {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-              size="lg"
+              disabled={isLoading}
+              className="w-full"
             >
-              Create Account
+              {isLoading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-blue-100">
+          <div className="mt-6 text-center text-sm">
+            <p>
               Already have an account?{" "}
-              <a
-                href="/signin"
-                className="text-blue-300 hover:text-blue-200 font-semibold underline"
-              >
+              <a href="/signin" className="text-blue-600 hover:underline">
                 Sign in
               </a>
             </p>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

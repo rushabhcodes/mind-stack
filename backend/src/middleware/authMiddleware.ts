@@ -13,7 +13,8 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
     if (!token) {
         res.status(401).json({
             message: 'Not logged in'
-        })
+        });
+        return;
     }
 
     try {

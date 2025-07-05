@@ -2,8 +2,26 @@ import { TwitterIcon } from "../../components/ui/twittericon"
 import { YoutubeIcon } from "../../icons/Youtube";
 import { InstagramIcon } from "./InstagramIcon";
 import { LinkedInIcon } from "../../components/ui/linkdINIcon";
+import axios from "../../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/v1/auth/logout');
+      // Clear any local storage or session storage if needed
+      localStorage.clear();
+      sessionStorage.clear();
+      // Redirect to sign in page
+      navigate('/signin', { replace: true });
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails on server, redirect to signin
+      navigate('/signin', { replace: true });
+    }
+  };
 
   
   return (
@@ -85,7 +103,10 @@ export const Sidebar = () => {
         </ul>
         {/* Logout Button */}
         <div className="px-6 pb-6 pt-2 border-t border-blue-100">
-          <button className="w-full flex items-center gap-3 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold transition">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold transition"
+          >
             <span className="text-lg">🚪</span>
             <span>Logout</span>
           </button>

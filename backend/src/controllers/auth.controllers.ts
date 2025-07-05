@@ -58,7 +58,7 @@ export async function signup(req: Request, res: Response) {
                 password: hashPassword
             })
 
-            res.status(403).json({
+            res.status(201).json({
                 newUser,
                 message: "User created successfully"
             });
@@ -120,7 +120,12 @@ export async function login(req: Request, res: Response) {
             id: existingUser._id
         }, process.env.JWT_SECRET!)
 
-        res.cookie('token', token, { httpOnly: true }).status(200).json({
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        }).status(200).json({
             message: "Login Succesfull"
         })
 
@@ -132,6 +137,30 @@ export async function login(req: Request, res: Response) {
     }
 }
 
-export function logout(req: any, res: any) {
-    res.send("Logout Route ");
+export function logout(req: Request, res: Response) {
+    try {
+        // Clear the token cookie
+        res.clearCookie('token', {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production'
+        });
+        
+        res.status(200).json({
+            message: "Logged out successfully"
+        });
+    } catch (error) {
+        res.status(500).json({
+            error,
+            message: "Server Error during logout"
+        });
+    }
+}
+
+export function verifyAuth(req: Request, res: Response) {
+    // If this function is reached, it means the auth middleware has validated the token
+    res.status(200).json({
+        message: "User is authenticated",
+        userId: req.userId
+    });
 }
