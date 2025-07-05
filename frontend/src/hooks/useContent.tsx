@@ -21,6 +21,7 @@ export function useContent() {
         type: extractDomain(item.link),
       }));
       setContent(contentWithType);
+      console.log(content)
     } catch (error) {
       console.error("Error fetching content:", error);
     }

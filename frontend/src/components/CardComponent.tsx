@@ -10,12 +10,14 @@ export const CardComponent = ({
   type = "unknown",
   id,
   onDelete,
+  description,
 }: {
   title: string;
   link: string;
   type: string;
   id: string;
   onDelete?: (id: string) => void;
+  description?: string;
 }) => {
   // Function to get the appropriate iframe source based on type
   const getIframeSrc = (url: string, contentType: string): string | null => {
@@ -265,6 +267,34 @@ export const CardComponent = ({
           />
         ) : (
           getSpecialPreview()
+        )}
+        {description && (
+          <div className="mt-3 p-3 bg-gray-50 rounded-md border">
+            <div className="text-sm text-gray-700 leading-relaxed">
+              {description.split('\n').map((line, index) => (
+                <p key={index} className={index > 0 ? 'mt-2' : ''}>
+                  {line.split(/(\*\*.*?\*\*|\*.*?\*)/).map((part, partIndex) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                      // Bold text
+                      return (
+                        <strong key={partIndex} className="font-semibold">
+                          {part.slice(2, -2)}
+                        </strong>
+                      );
+                    } else if (part.startsWith('*') && part.endsWith('*')) {
+                      // Italic text
+                      return (
+                        <em key={partIndex} className="italic">
+                          {part.slice(1, -1)}
+                        </em>
+                      );
+                    }
+                    return part;
+                  })}
+                </p>
+              ))}
+            </div>
+          </div>
         )}
         <div className="mt-3">
           <a

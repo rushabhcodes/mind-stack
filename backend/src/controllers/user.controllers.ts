@@ -8,6 +8,7 @@ import { random } from "../utils/utils";
 const createContentSchema = z.object({
     title: z.string().min(3).max(50),
     link: z.string().url().max(500),
+    description: z.string()
 })
 
 
@@ -38,13 +39,14 @@ export async function createContent(req: Request, res: Response) {
         return
     }
 
-    const { title, link } = result.data;
+    const { title, link, description } = result.data;
 
 
     try {
         const data = await contentModel.create({
             title,
             link,
+            description,
             tags: [],
             userId: req.userId,
         })

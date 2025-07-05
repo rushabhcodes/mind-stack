@@ -76,6 +76,7 @@ function Dashboard() {
                   id={data._id}
                   title={data.title}
                   link={data.link}
+                  description={data.description}
                   type={data.type}
                   onDelete={deleteContent}
                 />
