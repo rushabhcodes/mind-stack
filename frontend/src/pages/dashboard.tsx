@@ -9,11 +9,15 @@ import { useContent } from "@/hooks/useContent";
 
 function Dashboard() {
   const [open, setOpen] = useState(false);
-  const { content, deleteContent } = useContent();
+  const { content, deleteContent, refreshContent } = useContent();
   return (
     <>
       <Sidebar />
-      <CreateContentModal open={open} onClose={() => setOpen(false)} />
+      <CreateContentModal 
+        open={open} 
+        onClose={() => setOpen(false)} 
+        onContentAdded={refreshContent}
+      />
       <div className="ml-72 bg-sky-50 min-h-screen p-6">
         <div className="flex justify-end gap-3 mb-6">
           <Button variant="outline">
@@ -51,17 +55,33 @@ function Dashboard() {
             Add Content
           </Button>
         </div>
-        <div className="flex flex-wrap gap-6">
-          {content.map((data) => (
-            <CardComponent
-              key={data._id}
-              id={data._id}
-              title={data.title}
-              link={data.link}
-              type={data.type}
-              onDelete={deleteContent}
-            />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max">
+          {content.map((data, index) => {
+            // Create different sizes for bento grid effect
+            const getBentoSize = (index: number) => {
+              const patterns = [
+                "md:col-span-2 md:row-span-2", // Large square
+                "md:col-span-1 md:row-span-1", // Regular
+                "md:col-span-1 md:row-span-2", // Tall
+                "md:col-span-2 md:row-span-1", // Wide
+                "md:col-span-1 md:row-span-1", // Regular
+                "md:col-span-1 md:row-span-1", // Regular
+              ];
+              return patterns[index % patterns.length];
+            };
+
+            return (
+              <div key={data._id} className={`${getBentoSize(index)}`}>
+                <CardComponent
+                  id={data._id}
+                  title={data.title}
+                  link={data.link}
+                  type={data.type}
+                  onDelete={deleteContent}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

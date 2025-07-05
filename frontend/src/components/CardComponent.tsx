@@ -58,9 +58,9 @@ export const CardComponent = ({
       return null; // Some GitHub pages can be embedded
     }
 
-    // LinkedIn - doesn't allow iframe embedding
+    // LinkedIn - doesn't allow iframe embedding due to X-Frame-Options
     if (lowerType.includes("linkedin") || url.includes("linkedin.com")) {
-      return null;
+      return null; // LinkedIn blocks iframe embedding for security
     }
 
     // Instagram - doesn't allow iframe embedding
@@ -80,6 +80,106 @@ export const CardComponent = ({
   const iframeSrc = getIframeSrc(link, type);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Function to get a special preview for non-embeddable content
+  const getSpecialPreview = () => {
+    const lowerType = type.toLowerCase();
+    const lowerLink = link.toLowerCase();
+
+    // LinkedIn special preview
+    if (lowerType.includes("linkedin") || lowerLink.includes("linkedin.com")) {
+      let contentType = "LinkedIn Content";
+      let icon = "💼";
+      
+      if (lowerLink.includes("/in/")) {
+        contentType = "LinkedIn Profile";
+        icon = "👤";
+      } else if (lowerLink.includes("/company/")) {
+        contentType = "LinkedIn Company";
+        icon = "🏢";
+      } else if (lowerLink.includes("/posts/") || lowerLink.includes("/feed/update/")) {
+        contentType = "LinkedIn Post";
+        icon = "📝";
+      }
+
+      return (
+        <div className="w-full flex-1 min-h-[120px] bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-md flex flex-col items-center justify-center text-blue-700 p-4">
+          <div className="text-3xl mb-2">{icon}</div>
+          <p className="text-center font-medium mb-2">{contentType}</p>
+          <p className="text-sm text-center mb-3 text-blue-600">
+            LinkedIn content cannot be embedded for security reasons
+          </p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+          >
+            Open on LinkedIn
+          </a>
+        </div>
+      );
+    }
+
+    // Instagram special preview
+    if (lowerType.includes("instagram") || lowerLink.includes("instagram.com")) {
+      return (
+        <div className="w-full flex-1 min-h-[120px] bg-gradient-to-br from-pink-50 to-purple-100 border-2 border-pink-200 rounded-md flex flex-col items-center justify-center text-pink-700 p-4">
+          <div className="text-3xl mb-2">📸</div>
+          <p className="text-center font-medium mb-2">Instagram Content</p>
+          <p className="text-sm text-center mb-3 text-pink-600">
+            Instagram content cannot be embedded
+          </p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors text-sm font-medium"
+          >
+            Open on Instagram
+          </a>
+        </div>
+      );
+    }
+
+    // GitHub special preview
+    if (lowerType.includes("github") || lowerLink.includes("github.com")) {
+      return (
+        <div className="w-full flex-1 min-h-[120px] bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-md flex flex-col items-center justify-center text-gray-700 p-4">
+          <div className="text-3xl mb-2">⚡</div>
+          <p className="text-center font-medium mb-2">GitHub Repository</p>
+          <p className="text-sm text-center mb-3 text-gray-600">
+            Code repository or documentation
+          </p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition-colors text-sm font-medium"
+          >
+            Open on GitHub
+          </a>
+        </div>
+      );
+    }
+
+    // Default fallback
+    return (
+      <div className="w-full flex-1 min-h-[120px] bg-gray-100 border rounded-md flex items-center justify-center text-gray-500">
+        <p className="text-center px-4">
+          Preview not available -{" "}
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            Open link
+          </a>
+        </p>
+      </div>
+    );
+  };
 
   const handleDelete = async () => {
     if (!onDelete || !id) return;
@@ -107,10 +207,10 @@ export const CardComponent = ({
   
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-shrink-0">
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="text-gray-500 flex-shrink-0">
               {getTypeIcon(type)}
             </div>
@@ -154,42 +254,30 @@ export const CardComponent = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1 flex flex-col">
         {iframeSrc ? (
           <iframe
             src={iframeSrc}
-            className="w-full h-64 border rounded-md"
+            className="w-full flex-1 min-h-[200px] border rounded-md"
             frameBorder="0"
             allowFullScreen
             title={`Embedded content: ${title}`}
           />
         ) : (
-          <div className="w-full h-32 bg-gray-100 border rounded-md flex items-center justify-center text-gray-500">
-            <p>
-              Preview not available -{" "}
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                Open link
-              </a>
-            </p>
-          </div>
+          getSpecialPreview()
         )}
-        <div className="mb-3">
+        <div className="mt-3">
           <a
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline break-all"
+            className="text-sm text-blue-600 hover:underline break-all line-clamp-2"
           >
             {link}
           </a>
         </div>
       </CardContent>
-      <CardFooter>{type}</CardFooter>
+      <CardFooter className="flex-shrink-0 text-sm text-gray-500">{type}</CardFooter>
     </Card>
   );
 };

@@ -7,7 +7,7 @@ import { random } from "../utils/utils";
 
 const createContentSchema = z.object({
     title: z.string().min(3).max(50),
-    link: z.string().url().max(100),
+    link: z.string().url().max(500),
 })
 
 
