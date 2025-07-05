@@ -1,91 +1,87 @@
-import { PlusIcon, Share2Icon } from "@radix-ui/react-icons";
-import { Sidebar } from "../components/ui/Sidebar";
+import { Plus, Share2 } from "lucide-react";
 import CreateContentModal from "../components/CreateContentModal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CardComponent } from "@/components/CardComponent";
 import { useContent } from "@/hooks/useContent";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
-function Dashboard() {
+export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const { content, deleteContent, refreshContent } = useContent();
+  
   return (
-    <>
-      <Sidebar />
-      <CreateContentModal 
-        open={open} 
-        onClose={() => setOpen(false)} 
+    <SidebarProvider>
+      <CreateContentModal
+        open={open}
+        onClose={() => setOpen(false)}
         onContentAdded={refreshContent}
       />
-      <div className="ml-72 bg-sky-50 min-h-screen p-6">
-        <div className="flex justify-end gap-3 mb-6">
-          <Button variant="outline">
-            <Share2Icon className="w-6 h-6" />
-            Share
-          </Button>
-          <Button
-            style={{
-              background: "linear-gradient(90deg, #6366f1 0%, #38bdf8 100%)",
-              color: "white",
-              fontWeight: 700,
-              fontSize: 15,
-              border: "none",
-              borderRadius: 10,
-              padding: "6px 14px",
-              cursor: "pointer",
-              transition: "box-shadow 0.2s, filter 0.2s",
-              boxShadow: "0 2px 8px rgba(99,102,241,0.10)",
-              minHeight: 0,
-              minWidth: 0,
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.filter = "brightness(1.08)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 16px rgba(59,130,246,0.13)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.filter = "none";
-              e.currentTarget.style.boxShadow =
-                "0 2px 8px rgba(99,102,241,0.10)";
-            }}
-            onClick={() => setOpen(true)}
-          >
-            <PlusIcon className="w-6 h-6" />
-            Add Content
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max">
-          {content.map((data, index) => {
-            // Create different sizes for bento grid effect
-            const getBentoSize = (index: number) => {
-              const patterns = [
-                "md:col-span-2 md:row-span-2", // Large square
-                "md:col-span-1 md:row-span-1", // Regular
-                "md:col-span-1 md:row-span-2", // Tall
-                "md:col-span-2 md:row-span-1", // Wide
-                "md:col-span-1 md:row-span-1", // Regular
-                "md:col-span-1 md:row-span-1", // Regular
-              ];
-              return patterns[index % patterns.length];
-            };
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 h-4"
+            />
+            <h1 className="text-lg font-semibold">Dashboard</h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button variant="outline">
+              <Share2 className="w-4 h-4 mr-2" />
+              Share
+            </Button>
+            <Button
+              className="bg-gradient-to-r from-indigo-500 to-blue-400 hover:from-indigo-600 hover:to-blue-500 text-white font-bold"
+              onClick={() => setOpen(true)}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Content
+            </Button>
+          </div>
+        </header>
+        
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max">
+            {content.map((data, index) => {
+              // Create different sizes for bento grid effect
+              const getBentoSize = (index: number) => {
+                const patterns = [
+                  "md:col-span-2 md:row-span-2", // Large square
+                  "md:col-span-1 md:row-span-1", // Regular
+                  "md:col-span-1 md:row-span-2", // Tall
+                  "md:col-span-2 md:row-span-1", // Wide
+                  "md:col-span-1 md:row-span-1", // Regular
+                  "md:col-span-1 md:row-span-1", // Regular
+                ];
+                return patterns[index % patterns.length];
+              };
 
-            return (
-              <div key={data._id} className={`${getBentoSize(index)}`}>
-                <CardComponent
-                  id={data._id}
-                  title={data.title}
-                  link={data.link}
-                  description={data.description}
-                  type={data.type}
-                  onDelete={deleteContent}
-                />
-              </div>
-            );
-          })}
+              return (
+                <div key={data._id} className={`${getBentoSize(index)}`}>
+                  <CardComponent
+                    id={data._id}
+                    title={data.title}
+                    link={data.link}
+                    description={data.description}
+                    type={data.type}
+                    onDelete={deleteContent}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
-
-export default Dashboard;

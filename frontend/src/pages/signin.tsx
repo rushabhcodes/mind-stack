@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import axios from "../lib/axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export const SignIn = () => {
@@ -17,6 +17,24 @@ export const SignIn = () => {
   
   // Get the path the user was trying to access, or default to dashboard
   const from = location.state?.from || "/dashboard";
+
+  // Check if user is already authenticated on component mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get('/api/v1/auth/verify');
+        if (response.status === 200) {
+          // User is already authenticated, redirect to dashboard
+          navigate('/dashboard', { replace: true });
+        }
+      } catch (error) {
+        // User is not authenticated, stay on signin page
+        // No need to handle error as it's expected for unauthenticated users
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

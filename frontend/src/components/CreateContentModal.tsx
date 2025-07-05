@@ -55,10 +55,10 @@ export default function CreateContentModal({
   return open ? (
     <>
       <div 
-        className="fixed w-screen h-screen opacity-60 bg-slate-900 cursor-pointer" 
+        className="fixed w-screen h-screen opacity-60 z-50 bg-slate-900 cursor-pointer" 
         onClick={handleClose}
       ></div>
-      <div className="fixed flex justify-center items-center bg-transparent w-screen h-screen">
+      <div className="fixed z-70 flex justify-center items-center bg-transparent w-screen h-screen">
         <div className="w-96 bg-white fixed p-6 rounded-lg flex flex-col shadow-lg">
           <div
             onClick={handleClose}
