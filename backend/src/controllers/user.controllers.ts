@@ -87,9 +87,8 @@ export async function getContent(req: Request, res: Response) {
 }
 
 export async function deleteContent(req: Request, res: Response) {
-
-    const result = deleteContentSchema.safeParse(req.body)
-
+    console.log(req.params)
+    const result = deleteContentSchema.safeParse(req.params)
 
     if (!result.success) {
         res.status(411).json({

@@ -4,12 +4,12 @@ import { Sidebar } from "../components/ui/Sidebar";
 import CreateContentModal from "../components/CreateContentModal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CardComponent } from "@/components/ui/CardComponent";
+import { CardComponent } from "@/components/CardComponent";
 import { useContent } from "@/hooks/useContent";
 
 function Dashboard() {
   const [open, setOpen] = useState(false);
-  const content = useContent();
+  const { content, deleteContent } = useContent();
   return (
     <>
       <Sidebar />
@@ -52,12 +52,14 @@ function Dashboard() {
           </Button>
         </div>
         <div className="flex flex-wrap gap-6">
-          {content.map((data, index) => (
+          {content.map((data) => (
             <CardComponent
-              key={index}
+              key={data._id}
+              id={data._id}
               title={data.title}
               link={data.link}
               type={data.type}
+              onDelete={deleteContent}
             />
           ))}
         </div>

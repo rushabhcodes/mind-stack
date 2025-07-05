@@ -8,7 +8,7 @@ router.post("/content", auth, createContent);
 
 router.get("/content", auth, getContent);
 
-router.delete("/content", auth, deleteContent);
+router.delete("/content/:contentId", auth, deleteContent);
 
 router.post("/brain/share",auth, createShareLink);
 

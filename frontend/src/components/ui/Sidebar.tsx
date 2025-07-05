@@ -1,10 +1,7 @@
 import { TwitterIcon } from "../../components/ui/twittericon"
 import { YoutubeIcon } from "../../icons/Youtube";
 import { InstagramIcon } from "./InstagramIcon";
-import { SidebarItem } from "./SidebarItem";
 import { LinkedInIcon } from "../../components/ui/linkdINIcon";
-
-import React from "react";
 
 export const Sidebar = () => {
 
