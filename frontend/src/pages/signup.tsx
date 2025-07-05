@@ -26,7 +26,7 @@ export const SignUp = () => {
           // User is already authenticated, redirect to dashboard
           navigate('/dashboard', { replace: true });
         }
-      } catch (error) {
+      } catch {
         // User is not authenticated, stay on signup page
         // No need to handle error as it's expected for unauthenticated users
       }
@@ -65,8 +65,9 @@ export const SignUp = () => {
           navigate("/signin");
         }, 2000);
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      const errorMessage = axiosError.response?.data?.message || "Registration failed. Please try again.";
       toast.error(errorMessage);
       setError(errorMessage);
     } finally {

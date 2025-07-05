@@ -59,12 +59,20 @@ export default function SharedPage() {
         } else {
           setError("Shared content not found");
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching shared data:", error);
-        if (error.response?.status === 404) {
-          const errorMsg = "This share link doesn't exist or has been removed.";
-          setError(errorMsg);
-          toast.error(errorMsg);
+        if (error && typeof error === 'object' && 'response' in error) {
+          const axiosError = error as { response: { status: number } };
+          if (axiosError.response?.status === 404) {
+            const errorMsg = "This share link doesn't exist or has been removed.";
+            setError(errorMsg);
+            toast.error(errorMsg);
+          } else {
+            const errorMsg =
+              "Failed to load shared content. Please try again later.";
+            setError(errorMsg);
+            toast.error(errorMsg);
+          }
         } else {
           const errorMsg =
             "Failed to load shared content. Please try again later.";

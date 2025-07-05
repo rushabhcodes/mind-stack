@@ -1,22 +1,20 @@
-"use client"
-
-import * as React from "react"
+"use client";
+import * as React from "react";
 import {
-  BookOpen,
+  // BookOpen,
   Brain,
   Home,
-  LifeBuoy,
-  Search,
-  Settings2,
-  Tag,
-  Archive,
-  Star,
-} from "lucide-react"
+  // LifeBuoy,
+  // Search,
+  // Settings2,
+  // Tag,
+  // Archive,
+  // Star,
+} from "lucide-react";
 
-
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+// import { NavProjects } from "@/components/nav-projects";
+// import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -25,8 +23,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { NavMain } from "./main-nav"
+} from "@/components/ui/sidebar";
+import { NavMain } from "./main-nav";
 
 const data = {
   user: {
@@ -117,36 +115,36 @@ const data = {
     //   ],
     // },
   ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-  ],
-//   projects: [
-//     {
-//       name: "Work Resources",
-//       url: "#",
-//       icon: BookOpen,
-//     },
-//     {
-//       name: "Learning",
-//       url: "#",
-//       icon: Brain,
-//     },
-//     {
-//       name: "Personal",
-//       url: "#",
-//       icon: Star,
-//     },
-//   ],
-}
+  // navSecondary: [
+  //   {
+  //     title: "Support",
+  //     url: "#",
+  //     icon: LifeBuoy,
+  //   },
+  //   {
+  //     title: "Search",
+  //     url: "#",
+  //     icon: Search,
+  //   },
+  // ],
+  //   projects: [
+  //     {
+  //       name: "Work Resources",
+  //       url: "#",
+  //       icon: BookOpen,
+  //     },
+  //     {
+  //       name: "Learning",
+  //       url: "#",
+  //       icon: Brain,
+  //     },
+  //     {
+  //       name: "Personal",
+  //       url: "#",
+  //       icon: Star,
+  //     },
+  //   ],
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -171,11 +169,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         {/* <NavProjects projects={data.projects} /> */}
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

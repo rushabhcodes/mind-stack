@@ -20,7 +20,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         if (response.status === 200) {
           setIsAuthenticated(true);
         }
-      } catch (error: any) {
+      } catch {
         // If request fails, user is not authenticated
         setIsAuthenticated(false);
       } finally {

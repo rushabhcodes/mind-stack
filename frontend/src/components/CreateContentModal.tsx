@@ -40,10 +40,11 @@ export default function CreateContentModal({
       }
       // Auto close modal after successful submission
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating content:", error);
+      const axiosError = error as { response?: { data?: { message?: string } } };
       const errorMessage =
-        error.response?.data?.message ||
+        axiosError.response?.data?.message ||
         "Failed to add content. Please try again.";
       toast.error(errorMessage);
       setError(errorMessage);

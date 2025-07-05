@@ -28,7 +28,7 @@ export const SignIn = () => {
           // User is already authenticated, redirect to dashboard
           navigate('/dashboard', { replace: true });
         }
-      } catch (error) {
+      } catch {
         // User is not authenticated, stay on signin page
         // No need to handle error as it's expected for unauthenticated users
       }
@@ -52,8 +52,9 @@ export const SignIn = () => {
         toast.success("Login successful! Welcome back.");
         navigate(from, { replace: true });
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      const errorMessage = axiosError.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
       setError(errorMessage);
     } finally {

@@ -1,6 +1,6 @@
 import { extractDomain } from "@/lib/utils";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 
 interface ContentItem {
@@ -14,20 +14,20 @@ interface ContentItem {
 export function useContent() {
   const [content, setContent] = useState<ContentItem[]>([]);
 
-  const fetchContent = async () => {
+  const fetchContent = useCallback(async () => {
     try {
       const response = await axios.get("api/v1/user/content");
-      const contentWithType = response.data.content.map((item: any) => ({
-        ...item,
-        type: extractDomain(item.link),
+      const contentWithType = response.data.content.map((item: unknown) => ({
+        ...(item as ContentItem),
+        type: extractDomain((item as ContentItem).link),
       }));
       setContent(contentWithType);
-      console.log(content);
+      console.log(contentWithType);
     } catch (error) {
       console.error("Error fetching content:", error);
       toast.error("Failed to load content. Please refresh the page.");
     }
-  };
+  }, []);
 
   const deleteContent = async (id: string) => {
     try {
@@ -42,7 +42,7 @@ export function useContent() {
 
   useEffect(() => {
     fetchContent();
-  }, []);
+  }, [fetchContent]);
 
   return { content, deleteContent, refreshContent: fetchContent };
 }
