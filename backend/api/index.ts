@@ -11,7 +11,32 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true }))
+
+// CORS configuration
+const corsOptions = {
+  credentials: true,
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'https://mindstack.rushabh.dev',
+      'https://www.mindstack.rushabh.dev',
+      'https://mind-stack-pi.vercel.app',
+      process.env.FRONTEND_URL
+    ].filter(Boolean); // Remove undefined values
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+app.use(cors(corsOptions))
 
 app.use("/api/v1/auth", authRoute)
 
