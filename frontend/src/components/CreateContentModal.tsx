@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import axios from "axios";
+import axios from "../lib/axios";
 import { toast } from "sonner";
 export default function CreateContentModal({
   open,
@@ -25,7 +25,7 @@ export default function CreateContentModal({
     setError(null);
 
     try {
-      await axios.post(`api/v1/user/content`, { title, link, description });
+      await axios.post(`/api/v1/user/content`, { title, link, description });
       // Reset form
       setTitle("");
       setLink("");

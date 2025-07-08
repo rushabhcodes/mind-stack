@@ -1,5 +1,5 @@
 import { extractDomain } from "@/lib/utils";
-import axios from "axios";
+import axios from "../lib/axios";
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function useContent() {
 
   const fetchContent = useCallback(async () => {
     try {
-      const response = await axios.get("api/v1/user/content");
+      const response = await axios.get("/api/v1/user/content");
       const contentWithType = response.data.content.map((item: unknown) => ({
         ...(item as ContentItem),
         type: extractDomain((item as ContentItem).link),
@@ -31,7 +31,7 @@ export function useContent() {
 
   const deleteContent = async (id: string) => {
     try {
-      await axios.delete(`api/v1/user/content/${id}`);
+      await axios.delete(`/api/v1/user/content/${id}`);
       // Remove the deleted item from local state
       setContent((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {

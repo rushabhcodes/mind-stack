@@ -9,8 +9,12 @@ interface JwtPayload {
 export default function auth(req: Request, res: Response, next: NextFunction) {
 
     const token = req.cookies.token;
-    console.log("rutoken: " + token)
+    console.log("Auth middleware - token:", token);
+    console.log("Auth middleware - all cookies:", req.cookies);
+    console.log("Auth middleware - headers:", req.headers.cookie);
+    
     if (!token) {
+        console.log("No token found in cookies");
         res.status(401).json({
             message: 'Not logged in'
         });
