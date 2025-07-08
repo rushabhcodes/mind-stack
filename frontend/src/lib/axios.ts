@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-// Set default configuration for axios
-axios.defaults.withCredentials = true;
+// Create axios instance with base URL from environment variables
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001',
+  withCredentials: true,
+});
 
 // Add a request interceptor to ensure all requests include credentials
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     config.withCredentials = true;
     return config;
@@ -15,7 +18,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor to handle common auth errors
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -29,4 +32,4 @@ axios.interceptors.response.use(
   }
 );
 
-export default axios;
+export default axiosInstance;
