@@ -31,11 +31,16 @@ const loginSchema = z.object({
 
 
 export async function signup(req: Request, res: Response) {
+    console.log('Signup endpoint hit:', req.body);
+    
     const result = signupSchema.safeParse(req.body)
+    console.log('Signup validation result:', JSON.stringify(result));
 
     if (!result.success) {
+        console.log('Signup validation failed:', result.error);
         res.status(411).json({
-            message: "Error in inputs"
+            message: "Error in inputs",
+            errors: result.error.errors
         })
         return
     }
@@ -44,19 +49,23 @@ export async function signup(req: Request, res: Response) {
 
 
     try {
+        console.log('Starting user creation process...');
         const hashPassword = await bcrypt.hash(password, 10)
-
+        console.log('Password hashed successfully');
 
         const existingUser = await userModel.findOne({
             username: username
         })
+        console.log('Existing user check:', existingUser ? 'User exists' : 'User does not exist');
 
         if (!existingUser) {
+            console.log('Creating new user...');
             const newUser = await userModel.create({
                 username: username,
                 email: email,
                 password: hashPassword
             })
+            console.log('User created successfully:', newUser._id);
 
             res.status(201).json({
                 newUser,
@@ -65,11 +74,13 @@ export async function signup(req: Request, res: Response) {
             return
         }
 
+        console.log('User already exists, returning 403');
         res.status(403).json({
             message: "User already exists with this username"
         })
 
     } catch (error) {
+        console.error('Signup error:', error);
         res.status(500).json({
             error,
             message: "Server Error"

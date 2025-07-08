@@ -12,9 +12,19 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Origin: ${req.get('origin')}`);
+    console.log('Request body:', req.body);
+    next();
+});
+
 // CORS configuration
 const corsOptions = {
   credentials: true,
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
@@ -31,6 +41,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log('CORS rejected origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   }
@@ -38,8 +49,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+console.log('Registering auth routes...');
 app.use("/api/v1/auth", authRoute)
 
+console.log('Registering user routes...');
 app.use("/api/v1/user", userRoute)
 
 app.get("/", (req, res) => {
@@ -49,12 +62,12 @@ app.get("/", (req, res) => {
 
 initDb()
 
-app.listen(PORT, () => {
-    console.log(`Example app listening on port ${PORT}`)
-})
+// Only listen on port when not in Vercel environment
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Example app listening on port ${PORT}`)
+    })
+}
 
-// Export the handler for Vercel
-
-export default (req: Request, res: Response) => {
-    return app(req, res);
-};
+// Export the Express app for Vercel
+export default app;
